@@ -161,17 +161,17 @@ export default function Transactions({ user }: TransactionsProps) {
               ) : (
                 <div className="space-y-4">
                   {transactions.map((transaction: any) => (
-                    <div key={transaction.id} className="flex items-center justify-between p-4 border border-slate-200 rounded-lg">
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-medium text-slate-900">{transaction.description}</h4>
-                          <span className={`font-semibold ${
+                    <div key={transaction.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-slate-200 rounded-lg space-y-3 md:space-y-0">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-2 md:space-y-0">
+                          <h4 className="font-medium text-slate-900 truncate pr-2">{transaction.description}</h4>
+                          <span className={`font-semibold text-lg md:text-base self-start md:self-auto ${
                             transaction.type === "income" ? "text-green-600" : "text-red-600"
                           }`}>
                             {transaction.type === "income" ? "+" : "-"}${transaction.amount.toFixed(2)}
                           </span>
                         </div>
-                        <div className="flex items-center space-x-4 mt-1">
+                        <div className="flex flex-wrap items-center gap-2 md:gap-4 mt-2">
                           <span className="text-sm text-slate-500">
                             {transaction.category.charAt(0).toUpperCase() + transaction.category.slice(1)}
                           </span>
@@ -187,14 +187,14 @@ export default function Transactions({ user }: TransactionsProps) {
                           </span>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2 ml-4">
-                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                      <div className="flex items-center justify-end space-x-2 md:ml-4 flex-shrink-0">
+                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-slate-100">
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button 
                           size="sm" 
                           variant="ghost" 
-                          className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                          className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
                           onClick={() => handleDeleteTransaction(transaction.id)}
                         >
                           <Trash2 className="h-4 w-4" />
