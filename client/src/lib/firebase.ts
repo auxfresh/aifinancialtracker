@@ -49,6 +49,7 @@ export const addTransaction = async (transaction: any) => {
 
 export const getUserTransactions = async (userId: string) => {
   try {
+    // First try the ordered query
     const q = query(
       collection(db, COLLECTIONS.TRANSACTIONS),
       where("userId", "==", userId),
@@ -62,8 +63,38 @@ export const getUserTransactions = async (userId: string) => {
     });
     console.log('Total transactions found:', transactions.length); // Debug log
     return transactions;
-  } catch (error) {
-    console.error('Error fetching transactions:', error);
+  } catch (error: any) {
+    console.error('Error with ordered query:', error);
+    
+    // If the ordered query fails due to missing index, try without ordering
+    if (error.code === 'failed-precondition') {
+      console.log('Trying fallback query without ordering...');
+      try {
+        const fallbackQuery = query(
+          collection(db, COLLECTIONS.TRANSACTIONS),
+          where("userId", "==", userId)
+        );
+        const querySnapshot = await getDocs(fallbackQuery);
+        const transactions = querySnapshot.docs.map(doc => {
+          const data = doc.data();
+          return { id: doc.id, ...data };
+        });
+        
+        // Sort manually by date (newest first)
+        transactions.sort((a: any, b: any) => {
+          const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date);
+          const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date);
+          return dateB.getTime() - dateA.getTime();
+        });
+        
+        console.log('Fallback query successful, transactions found:', transactions.length);
+        return transactions;
+      } catch (fallbackError) {
+        console.error('Fallback query also failed:', fallbackError);
+        return [];
+      }
+    }
+    
     return [];
   }
 };
