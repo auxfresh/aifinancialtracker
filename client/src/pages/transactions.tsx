@@ -19,10 +19,32 @@ export default function Transactions({ user }: TransactionsProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: transactions = [], isLoading } = useQuery({
+  const { data: rawTransactions = [], isLoading } = useQuery({
     queryKey: ['/api/transactions', user.id],
     queryFn: () => getUserTransactions(user.id),
   });
+
+  // Process transactions to ensure proper data format
+  const transactions = rawTransactions.map((t: any) => {
+    let processedDate: Date;
+    if (t.date?.toDate) {
+      processedDate = t.date.toDate();
+    } else if (t.date?.seconds) {
+      processedDate = new Date(t.date.seconds * 1000);
+    } else {
+      processedDate = new Date(t.date);
+    }
+
+    return {
+      id: t.id,
+      userId: t.userId,
+      amount: Number(t.amount),
+      description: t.description,
+      category: t.category,
+      type: t.type,
+      date: processedDate,
+    };
+  }) as Transaction[];
 
   const handleDeleteTransaction = async (id: string) => {
     if (!confirm("Are you sure you want to delete this transaction?")) return;

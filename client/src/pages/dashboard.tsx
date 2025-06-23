@@ -22,11 +22,28 @@ export default function Dashboard({ user }: DashboardProps) {
     queryFn: () => getUserTransactions(user.id),
   });
 
-  // Convert Firestore timestamps to Date objects
-  const processedTransactions = transactions.map((t: any) => ({
-    ...t,
-    date: t.date?.toDate ? t.date.toDate() : new Date(t.date),
-  })) as Transaction[];
+  // Convert Firestore timestamps to Date objects and ensure proper data structure
+  const processedTransactions = transactions.map((t: any) => {
+    // Handle different date formats from Firebase
+    let processedDate: Date;
+    if (t.date?.toDate) {
+      processedDate = t.date.toDate();
+    } else if (t.date?.seconds) {
+      processedDate = new Date(t.date.seconds * 1000);
+    } else {
+      processedDate = new Date(t.date);
+    }
+
+    return {
+      id: t.id,
+      userId: t.userId,
+      amount: Number(t.amount),
+      description: t.description,
+      category: t.category,
+      type: t.type,
+      date: processedDate,
+    };
+  }) as Transaction[];
 
   if (isLoading) {
     return (
