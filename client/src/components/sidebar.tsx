@@ -16,8 +16,6 @@ export default function Sidebar({ user }: SidebarProps) {
   const navigation = [
     { name: "Dashboard", href: "/", icon: BarChart3 },
     { name: "Transactions", href: "/transactions", icon: List },
-    { name: "Budgets", href: "/budgets", icon: Target },
-    { name: "Categories", href: "/categories", icon: Tags },
     { name: "Reports", href: "/reports", icon: PieChart },
   ];
 

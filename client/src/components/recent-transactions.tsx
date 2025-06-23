@@ -50,7 +50,7 @@ export default function RecentTransactions({ transactions }: RecentTransactionsP
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-slate-900">Recent Transactions</h3>
           <Link href="/transactions">
-            <a className="text-sm text-primary hover:text-blue-700">View all</a>
+            <span className="text-sm text-primary hover:text-blue-700 cursor-pointer">View all</span>
           </Link>
         </div>
       </CardHeader>
