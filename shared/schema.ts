@@ -8,6 +8,11 @@ export const userSchema = z.object({
   createdAt: z.date().optional(),
 });
 
+export const insertUserSchema = userSchema.omit({
+  id: true,
+  createdAt: true,
+});
+
 // Transaction schema
 export const transactionSchema = z.object({
   id: z.string(),
@@ -66,6 +71,7 @@ export const registerSchema = z.object({
 
 // Type exports
 export type User = z.infer<typeof userSchema>;
+export type InsertUser = z.infer<typeof insertUserSchema>;
 export type Transaction = z.infer<typeof transactionSchema>;
 export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
 export type Budget = z.infer<typeof budgetSchema>;
