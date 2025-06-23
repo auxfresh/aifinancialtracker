@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "firebase/auth";
-import { getFirestore, collection, addDoc, query, where, orderBy, getDocs, doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, type Auth } from "firebase/auth";
+import { getFirestore, collection, addDoc, query, where, orderBy, getDocs, doc, updateDoc, deleteDoc, getDoc, type Firestore } from "firebase/firestore";
 import type { User } from "@shared/schema";
 
 const firebaseConfig = {
@@ -12,8 +12,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+
+export const auth: Auth = getAuth(app);
+export const db: Firestore = getFirestore(app);
 
 // Auth functions
 export const registerUser = async (email: string, password: string, name: string) => {
@@ -28,7 +29,7 @@ export const loginUser = async (email: string, password: string) => {
 };
 
 export const logoutUser = async () => {
-  await signOut(auth);
+  return signOut(auth);
 };
 
 // Firestore collections
@@ -36,15 +37,14 @@ export const COLLECTIONS = {
   TRANSACTIONS: "transactions",
   BUDGETS: "budgets",
   CATEGORIES: "categories",
-} as const;
+};
 
 // Transaction functions
 export const addTransaction = async (transaction: any) => {
-  const docRef = await addDoc(collection(db, COLLECTIONS.TRANSACTIONS), {
+  return addDoc(collection(db, COLLECTIONS.TRANSACTIONS), {
     ...transaction,
     createdAt: new Date(),
   });
-  return docRef.id;
 };
 
 export const getUserTransactions = async (userId: string) => {
@@ -59,21 +59,20 @@ export const getUserTransactions = async (userId: string) => {
 
 export const updateTransaction = async (id: string, data: any) => {
   const docRef = doc(db, COLLECTIONS.TRANSACTIONS, id);
-  await updateDoc(docRef, data);
+  return updateDoc(docRef, data);
 };
 
 export const deleteTransaction = async (id: string) => {
   const docRef = doc(db, COLLECTIONS.TRANSACTIONS, id);
-  await deleteDoc(docRef);
+  return deleteDoc(docRef);
 };
 
 // Budget functions
 export const addBudget = async (budget: any) => {
-  const docRef = await addDoc(collection(db, COLLECTIONS.BUDGETS), {
+  return addDoc(collection(db, COLLECTIONS.BUDGETS), {
     ...budget,
     createdAt: new Date(),
   });
-  return docRef.id;
 };
 
 export const getUserBudgets = async (userId: string) => {
