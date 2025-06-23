@@ -103,7 +103,10 @@ This is a full-stack personal finance tracking application built with React, Exp
 
 ```
 Changelog:
-- June 23, 2025. Initial setup
+- June 23, 2025: Initial setup with Firebase authentication and Firestore
+- June 23, 2025: Fixed Firebase dependencies issue - app now runs properly
+- June 23, 2025: Configured Firebase secrets for production deployment
+- June 23, 2025: Prepared Netlify deployment configuration and documentation
 ```
 
 ## User Preferences

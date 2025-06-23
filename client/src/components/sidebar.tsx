@@ -62,8 +62,8 @@ export default function Sidebar({ user }: SidebarProps) {
             return (
               <li key={item.name}>
                 <Link href={item.href}>
-                  <a
-                    className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  <div
+                    className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
                       isActive
                         ? "bg-blue-50 text-primary"
                         : "text-slate-600 hover:bg-slate-50"
@@ -71,7 +71,7 @@ export default function Sidebar({ user }: SidebarProps) {
                   >
                     <Icon className="h-4 w-4" />
                     <span>{item.name}</span>
-                  </a>
+                  </div>
                 </Link>
               </li>
             );
