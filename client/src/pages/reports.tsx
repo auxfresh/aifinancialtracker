@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import Sidebar from "@/components/sidebar";
+import Sidebar, { MobileMenu } from "@/components/sidebar";
 import { getUserTransactions } from "@/lib/firebase";
 import type { User, Transaction } from "@shared/schema";
 
@@ -110,10 +110,11 @@ export default function Reports({ user }: ReportsProps) {
 
   return (
     <div className="min-h-screen flex bg-slate-50">
+      <MobileMenu user={user} />
       <Sidebar user={user} />
       
       <main className="flex-1 overflow-y-auto">
-        <div className="p-6">
+        <div className="p-6 md:p-6 pt-16 md:pt-6">
           {/* Header */}
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-slate-900">Financial Reports</h1>
@@ -129,18 +130,20 @@ export default function Reports({ user }: ReportsProps) {
               </CardHeader>
               <CardContent>
                 {monthlyData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={monthlyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip formatter={(value: number) => [`$${value.toFixed(2)}`, '']} />
-                      <Bar dataKey="income" fill="#10b981" name="Income" />
-                      <Bar dataKey="expenses" fill="#ef4444" name="Expenses" />
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <div className="w-full overflow-x-auto">
+                    <ResponsiveContainer width="100%" height={250} minWidth={300}>
+                      <BarChart data={monthlyData} margin={{ top: 20, right: 20, left: 20, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <Tooltip formatter={(value: number) => [`$${value.toFixed(2)}`, '']} />
+                        <Bar dataKey="income" fill="#10b981" name="Income" />
+                        <Bar dataKey="expenses" fill="#ef4444" name="Expenses" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
                 ) : (
-                  <div className="h-300 flex items-center justify-center text-slate-500">
+                  <div className="h-64 flex items-center justify-center text-slate-500">
                     No transaction data available
                   </div>
                 )}
@@ -154,13 +157,13 @@ export default function Reports({ user }: ReportsProps) {
               </CardHeader>
               <CardContent>
                 {overallData.some(d => d.value > 0) ? (
-                  <ResponsiveContainer width="100%" height={300}>
+                  <ResponsiveContainer width="100%" height={250}>
                     <PieChart>
                       <Pie
                         data={overallData}
                         cx="50%"
                         cy="50%"
-                        outerRadius={80}
+                        outerRadius={70}
                         dataKey="value"
                         label={({ name, value }) => `${name}: $${value.toFixed(0)}`}
                       >
@@ -172,7 +175,7 @@ export default function Reports({ user }: ReportsProps) {
                     </PieChart>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="h-300 flex items-center justify-center text-slate-500">
+                  <div className="h-64 flex items-center justify-center text-slate-500">
                     No transaction data available
                   </div>
                 )}
@@ -187,13 +190,13 @@ export default function Reports({ user }: ReportsProps) {
             </CardHeader>
             <CardContent>
               {categoryData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={250}>
                   <PieChart>
                     <Pie
                       data={categoryData}
                       cx="50%"
                       cy="50%"
-                      outerRadius={80}
+                      outerRadius={70}
                       dataKey="value"
                       label={({ name, value }) => `${name}: $${value.toFixed(0)}`}
                     >
@@ -205,7 +208,7 @@ export default function Reports({ user }: ReportsProps) {
                   </PieChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-300 flex items-center justify-center text-slate-500">
+                <div className="h-64 flex items-center justify-center text-slate-500">
                   No expense data available
                 </div>
               )}

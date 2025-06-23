@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Plus, Edit, Trash2 } from "lucide-react";
-import Sidebar from "@/components/sidebar";
+import Sidebar, { MobileMenu } from "@/components/sidebar";
 import AddTransactionModal from "@/components/add-transaction-modal";
 import { getUserTransactions, deleteTransaction } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
@@ -70,19 +70,20 @@ export default function Transactions({ user }: TransactionsProps) {
 
   return (
     <div className="min-h-screen flex bg-slate-50">
+      <MobileMenu user={user} />
       <Sidebar user={user} />
       
       <main className="flex-1 overflow-y-auto">
-        <div className="p-6">
+        <div className="p-6 md:p-6 pt-16 md:pt-6">
           {/* Header */}
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 space-y-4 md:space-y-0">
             <div>
               <h1 className="text-2xl font-bold text-slate-900">Transactions</h1>
               <p className="text-slate-600">Manage your income and expenses</p>
             </div>
             <Button 
               onClick={() => setIsAddModalOpen(true)}
-              className="bg-primary hover:bg-blue-700"
+              className="bg-primary hover:bg-blue-700 w-full md:w-auto"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Transaction

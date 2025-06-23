@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Wallet, BarChart3, List, Target, Tags, PieChart, LogOut } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Wallet, BarChart3, List, PieChart, LogOut, Menu } from "lucide-react";
 import { logoutUser } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
 import type { User } from "@shared/schema";
@@ -9,7 +11,8 @@ interface SidebarProps {
   user: User;
 }
 
-export default function Sidebar({ user }: SidebarProps) {
+// Navigation component that can be reused in both desktop and mobile views
+function NavigationMenu({ user, onItemClick }: { user: User; onItemClick?: () => void }) {
   const [location] = useLocation();
   const { toast } = useToast();
 
@@ -26,6 +29,7 @@ export default function Sidebar({ user }: SidebarProps) {
         title: "Signed out",
         description: "You have been signed out successfully",
       });
+      onItemClick?.();
     } catch (error) {
       toast({
         title: "Error",
@@ -36,7 +40,7 @@ export default function Sidebar({ user }: SidebarProps) {
   };
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
+    <div className="flex flex-col h-full">
       {/* Header */}
       <div className="p-6 border-b border-slate-200">
         <div className="flex items-center space-x-3">
@@ -61,6 +65,7 @@ export default function Sidebar({ user }: SidebarProps) {
               <li key={item.name}>
                 <Link href={item.href}>
                   <div
+                    onClick={onItemClick}
                     className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
                       isActive
                         ? "bg-blue-50 text-primary"
@@ -88,6 +93,37 @@ export default function Sidebar({ user }: SidebarProps) {
           Sign Out
         </Button>
       </div>
+    </div>
+  );
+}
+
+// Mobile hamburger menu component
+export function MobileMenu({ user }: { user: User }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden fixed top-4 left-4 z-50 bg-white border border-slate-200 shadow-sm"
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="p-0 w-64">
+        <NavigationMenu user={user} onItemClick={() => setOpen(false)} />
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+// Desktop sidebar component
+export default function Sidebar({ user }: SidebarProps) {
+  return (
+    <aside className="hidden md:flex w-64 bg-white border-r border-slate-200 flex-col">
+      <NavigationMenu user={user} />
     </aside>
   );
 }
