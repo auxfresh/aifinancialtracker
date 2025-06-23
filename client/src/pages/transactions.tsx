@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Plus, Edit, Trash2, Download, FileText, File, FileImage } from "lucide-react";
 import Sidebar, { MobileMenu } from "@/components/sidebar";
 import AddTransactionModal from "@/components/add-transaction-modal";
 import { getUserTransactions, deleteTransaction } from "@/lib/firebase";
+import { exportToTXT, exportToPDF, exportToDOCX } from "@/lib/export";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import type { User, Transaction } from "@shared/schema";
@@ -102,13 +104,41 @@ export default function Transactions({ user }: TransactionsProps) {
               <h1 className="text-2xl font-bold text-slate-900">Transactions</h1>
               <p className="text-slate-600">Manage your income and expenses</p>
             </div>
-            <Button 
-              onClick={() => setIsAddModalOpen(true)}
-              className="bg-primary hover:bg-blue-700 w-full md:w-auto"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Transaction
-            </Button>
+            <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="w-full md:w-auto"
+                    disabled={transactions.length === 0}
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Export
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => exportToTXT(transactions, user.name)}>
+                    <FileText className="h-4 w-4 mr-2" />
+                    Export as TXT
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => exportToPDF(transactions, user.name)}>
+                    <FileImage className="h-4 w-4 mr-2" />
+                    Export as PDF
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => exportToDOCX(transactions, user.name)}>
+                    <File className="h-4 w-4 mr-2" />
+                    Export as DOCX
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button 
+                onClick={() => setIsAddModalOpen(true)}
+                className="bg-primary hover:bg-blue-700 w-full md:w-auto"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Transaction
+              </Button>
+            </div>
           </div>
 
           {/* Transactions List */}
