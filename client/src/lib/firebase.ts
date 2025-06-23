@@ -48,13 +48,24 @@ export const addTransaction = async (transaction: any) => {
 };
 
 export const getUserTransactions = async (userId: string) => {
-  const q = query(
-    collection(db, COLLECTIONS.TRANSACTIONS),
-    where("userId", "==", userId),
-    orderBy("date", "desc")
-  );
-  const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  try {
+    const q = query(
+      collection(db, COLLECTIONS.TRANSACTIONS),
+      where("userId", "==", userId),
+      orderBy("date", "desc")
+    );
+    const querySnapshot = await getDocs(q);
+    const transactions = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      console.log('Raw transaction data:', data); // Debug log
+      return { id: doc.id, ...data };
+    });
+    console.log('Total transactions found:', transactions.length); // Debug log
+    return transactions;
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
+    return [];
+  }
 };
 
 export const updateTransaction = async (id: string, data: any) => {

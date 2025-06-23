@@ -65,9 +65,8 @@ export default function Transactions({ user }: TransactionsProps) {
     }
   };
 
-  const formatDate = (date: any) => {
-    const transactionDate = date.toDate ? date.toDate() : new Date(date);
-    return transactionDate.toLocaleDateString([], { 
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString([], { 
       year: 'numeric', 
       month: 'short', 
       day: 'numeric',

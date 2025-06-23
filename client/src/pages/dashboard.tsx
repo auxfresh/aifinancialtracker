@@ -24,6 +24,8 @@ export default function Dashboard({ user }: DashboardProps) {
 
   // Convert Firestore timestamps to Date objects and ensure proper data structure
   const processedTransactions = transactions.map((t: any) => {
+    console.log('Processing transaction:', t); // Debug log
+    
     // Handle different date formats from Firebase
     let processedDate: Date;
     if (t.date?.toDate) {
@@ -34,7 +36,7 @@ export default function Dashboard({ user }: DashboardProps) {
       processedDate = new Date(t.date);
     }
 
-    return {
+    const processed = {
       id: t.id,
       userId: t.userId,
       amount: Number(t.amount),
@@ -43,7 +45,12 @@ export default function Dashboard({ user }: DashboardProps) {
       type: t.type,
       date: processedDate,
     };
+    
+    console.log('Processed transaction:', processed); // Debug log
+    return processed;
   }) as Transaction[];
+
+  console.log('Final processed transactions:', processedTransactions); // Debug log
 
   if (isLoading) {
     return (
