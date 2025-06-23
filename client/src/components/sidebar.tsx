@@ -60,7 +60,7 @@ function NavigationMenu({ user, onItemClick }: { user: User; onItemClick?: () =>
           {navigation.map((item) => {
             const Icon = item.icon;
             const isActive = location === item.href;
-            
+
             return (
               <li key={item.name}>
                 <Link href={item.href}>
