@@ -7,7 +7,7 @@ import { Plus, Edit, Trash2, Download, FileText, File, FileImage } from "lucide-
 import Sidebar, { MobileMenu } from "@/components/sidebar";
 import AddTransactionModal from "@/components/add-transaction-modal";
 import { getUserTransactions, deleteTransaction } from "@/lib/firebase";
-import { exportToTXT, exportToPDF, exportToDOCX } from "@/lib/export";
+import { exportToTXT, exportToPDF, exportToCSV } from "@/lib/export";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import type { User, Transaction } from "@shared/schema";
@@ -125,9 +125,9 @@ export default function Transactions({ user }: TransactionsProps) {
                     <FileImage className="h-4 w-4 mr-2" />
                     Export as PDF
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => exportToDOCX(transactions, user.name)}>
+                  <DropdownMenuItem onClick={() => exportToCSV(transactions, user.name)}>
                     <File className="h-4 w-4 mr-2" />
-                    Export as DOCX
+                    Export as CSV
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

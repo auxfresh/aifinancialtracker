@@ -9,7 +9,7 @@ import RecentTransactions from "@/components/recent-transactions";
 import ExpenseCategories from "@/components/expense-categories";
 import AddTransactionModal from "@/components/add-transaction-modal";
 import { getUserTransactions } from "@/lib/firebase";
-import { exportToTXT, exportToPDF, exportToDOCX } from "@/lib/export";
+import { exportToTXT, exportToPDF, exportToCSV } from "@/lib/export";
 import type { User, Transaction } from "@shared/schema";
 
 interface DashboardProps {
@@ -106,9 +106,9 @@ export default function Dashboard({ user }: DashboardProps) {
                     <FileImage className="h-4 w-4 mr-2" />
                     Export as PDF
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => exportToDOCX(processedTransactions, user.name)}>
+                  <DropdownMenuItem onClick={() => exportToCSV(processedTransactions, user.name)}>
                     <File className="h-4 w-4 mr-2" />
-                    Export as DOCX
+                    Export as CSV
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

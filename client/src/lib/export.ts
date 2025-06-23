@@ -1,15 +1,8 @@
 
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import { Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun } from 'docx';
+import autoTable from 'jspdf-autotable';
 import { saveAs } from 'file-saver';
 import type { Transaction } from '@shared/schema';
-
-declare module 'jspdf' {
-  interface jsPDF {
-    autoTable: (options: any) => jsPDF;
-  }
-}
 
 export const exportToTXT = (transactions: Transaction[], userName: string) => {
   let content = `Personal Finance Tracker - Transaction Export\n`;
@@ -82,7 +75,7 @@ export const exportToPDF = (transactions: Transaction[], userName: string) => {
     `${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}`
   ]);
 
-  doc.autoTable({
+  autoTable(doc, {
     head: [['Date', 'Description', 'Category', 'Type', 'Amount']],
     body: tableData,
     startY: 115,
@@ -94,7 +87,7 @@ export const exportToPDF = (transactions: Transaction[], userName: string) => {
   doc.save(`transactions_${new Date().toISOString().split('T')[0]}.pdf`);
 };
 
-export const exportToDOCX = async (transactions: Transaction[], userName: string) => {
+export const exportToCSV = (transactions: Transaction[], userName: string) => {
   // Calculate totals
   const totalIncome = transactions
     .filter(t => t.type === 'income')
@@ -104,151 +97,30 @@ export const exportToDOCX = async (transactions: Transaction[], userName: string
     .filter(t => t.type === 'expense')
     .reduce((sum, t) => sum + t.amount, 0);
 
-  // Create document
-  const doc = new Document({
-    sections: [
-      {
-        children: [
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: "Personal Finance Tracker - Transaction Export",
-                bold: true,
-                size: 32,
-              }),
-            ],
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `User: ${userName}`,
-                size: 24,
-              }),
-            ],
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `Export Date: ${new Date().toLocaleDateString()}`,
-                size: 24,
-              }),
-            ],
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `Total Transactions: ${transactions.length}`,
-                size: 24,
-              }),
-            ],
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: "",
-              }),
-            ],
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: "SUMMARY",
-                bold: true,
-                size: 28,
-              }),
-            ],
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `Total Income: $${totalIncome.toFixed(2)}`,
-                size: 24,
-              }),
-            ],
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `Total Expenses: $${totalExpenses.toFixed(2)}`,
-                size: 24,
-              }),
-            ],
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `Net Balance: $${(totalIncome - totalExpenses).toFixed(2)}`,
-                size: 24,
-                bold: true,
-              }),
-            ],
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: "",
-              }),
-            ],
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: "TRANSACTIONS",
-                bold: true,
-                size: 28,
-              }),
-            ],
-          }),
-          new Table({
-            rows: [
-              new TableRow({
-                children: [
-                  new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "Date", bold: true })] })],
-                  }),
-                  new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "Description", bold: true })] })],
-                  }),
-                  new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "Category", bold: true })] })],
-                  }),
-                  new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "Type", bold: true })] })],
-                  }),
-                  new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "Amount", bold: true })] })],
-                  }),
-                ],
-              }),
-              ...transactions.map(transaction => 
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      children: [new Paragraph({ children: [new TextRun({ text: transaction.date.toLocaleDateString() })] })],
-                    }),
-                    new TableCell({
-                      children: [new Paragraph({ children: [new TextRun({ text: transaction.description })] })],
-                    }),
-                    new TableCell({
-                      children: [new Paragraph({ children: [new TextRun({ text: transaction.category.charAt(0).toUpperCase() + transaction.category.slice(1) })] })],
-                    }),
-                    new TableCell({
-                      children: [new Paragraph({ children: [new TextRun({ text: transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1) })] })],
-                    }),
-                    new TableCell({
-                      children: [new Paragraph({ children: [new TextRun({ text: `${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}` })] })],
-                    }),
-                  ],
-                })
-              ),
-            ],
-          }),
-        ],
-      },
-    ],
+  // Create CSV content
+  let csvContent = `Personal Finance Tracker - Transaction Export\n`;
+  csvContent += `User,${userName}\n`;
+  csvContent += `Export Date,${new Date().toLocaleDateString()}\n`;
+  csvContent += `Total Transactions,${transactions.length}\n\n`;
+  
+  csvContent += `SUMMARY\n`;
+  csvContent += `Total Income,$${totalIncome.toFixed(2)}\n`;
+  csvContent += `Total Expenses,$${totalExpenses.toFixed(2)}\n`;
+  csvContent += `Net Balance,$${(totalIncome - totalExpenses).toFixed(2)}\n\n`;
+  
+  csvContent += `TRANSACTIONS\n`;
+  csvContent += `Date,Description,Category,Type,Amount\n`;
+  
+  transactions.forEach(transaction => {
+    const date = transaction.date.toLocaleDateString();
+    const description = `"${transaction.description.replace(/"/g, '""')}"`;
+    const category = transaction.category.charAt(0).toUpperCase() + transaction.category.slice(1);
+    const type = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
+    const amount = `${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}`;
+    
+    csvContent += `${date},${description},${category},${type},${amount}\n`;
   });
 
-  const buffer = await Packer.toBuffer(doc);
-  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-  saveAs(blob, `transactions_${new Date().toISOString().split('T')[0]}.docx`);
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+  saveAs(blob, `transactions_${new Date().toISOString().split('T')[0]}.csv`);
 };
