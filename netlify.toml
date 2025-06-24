@@ -1,6 +1,6 @@
 [build]
-  command = "npx vite build && cp _redirects dist/"
-  publish = "dist"
+  command = "mkdir -p dist/public && npx vite build && cp _redirects dist/public/"
+  publish = "dist/public"
   
 [build.environment]
   NODE_VERSION = "20"
