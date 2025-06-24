@@ -21,9 +21,9 @@ export const exportToTXT = (transactions: Transaction[], userName: string) => {
     .reduce((sum, t) => sum + t.amount, 0);
 
   content += `SUMMARY:\n`;
-  content += `Total Income: $${totalIncome.toFixed(2)}\n`;
-  content += `Total Expenses: $${totalExpenses.toFixed(2)}\n`;
-  content += `Net Balance: $${(totalIncome - totalExpenses).toFixed(2)}\n\n`;
+  content += `Total Income: ₦${totalIncome.toFixed(2)}\n`;
+  content += `Total Expenses: ₦${totalExpenses.toFixed(2)}\n`;
+  content += `Net Balance: ₦${(totalIncome - totalExpenses).toFixed(2)}\n\n`;
   content += `${'='.repeat(80)}\n\n`;
 
   content += `TRANSACTIONS:\n\n`;
@@ -62,9 +62,9 @@ export const exportToPDF = (transactions: Transaction[], userName: string) => {
     .reduce((sum, t) => sum + t.amount, 0);
 
   doc.text('SUMMARY:', 20, 70);
-  doc.text(`Total Income: $${totalIncome.toFixed(2)}`, 20, 80);
-  doc.text(`Total Expenses: $${totalExpenses.toFixed(2)}`, 20, 90);
-  doc.text(`Net Balance: $${(totalIncome - totalExpenses).toFixed(2)}`, 20, 100);
+  doc.text(`Total Income: ₦${totalIncome.toFixed(2)}`, 20, 80);
+  doc.text(`Total Expenses: ₦${totalExpenses.toFixed(2)}`, 20, 90);
+  doc.text(`Net Balance: ₦${(totalIncome - totalExpenses).toFixed(2)}`, 20, 100);
 
   // Transactions table
   const tableData = transactions.map(transaction => [
@@ -72,7 +72,7 @@ export const exportToPDF = (transactions: Transaction[], userName: string) => {
     transaction.description,
     transaction.category.charAt(0).toUpperCase() + transaction.category.slice(1),
     transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1),
-    `${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}`
+    `${transaction.type === 'income' ? '+' : '-'}₦${transaction.amount.toFixed(2)}`
   ]);
 
   autoTable(doc, {
@@ -104,9 +104,9 @@ export const exportToCSV = (transactions: Transaction[], userName: string) => {
   csvContent += `Total Transactions,${transactions.length}\n\n`;
   
   csvContent += `SUMMARY\n`;
-  csvContent += `Total Income,$${totalIncome.toFixed(2)}\n`;
-  csvContent += `Total Expenses,$${totalExpenses.toFixed(2)}\n`;
-  csvContent += `Net Balance,$${(totalIncome - totalExpenses).toFixed(2)}\n\n`;
+  csvContent += `Total Income,₦${totalIncome.toFixed(2)}\n`;
+  csvContent += `Total Expenses,₦${totalExpenses.toFixed(2)}\n`;
+  csvContent += `Net Balance,₦${(totalIncome - totalExpenses).toFixed(2)}\n\n`;
   
   csvContent += `TRANSACTIONS\n`;
   csvContent += `Date,Description,Category,Type,Amount\n`;
