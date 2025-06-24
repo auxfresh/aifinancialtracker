@@ -34,21 +34,21 @@ export default function StatsCards({ transactions }: StatsCardsProps) {
   const stats = [
     {
       title: "Total Balance",
-      value: `$${totalBalance.toFixed(2)}`,
+      value: `₦${totalBalance.toFixed(2)}`,
       icon: Wallet,
       bgColor: "bg-blue-100",
       iconColor: "text-primary",
     },
     {
       title: "Monthly Income",
-      value: `$${monthlyIncome.toFixed(2)}`,
+      value: `₦${monthlyIncome.toFixed(2)}`,
       icon: TrendingUp,
       bgColor: "bg-green-100",
       iconColor: "text-green-600",
     },
     {
       title: "Monthly Expenses",
-      value: `$${monthlyExpenses.toFixed(2)}`,
+      value: `₦${monthlyExpenses.toFixed(2)}`,
       icon: TrendingDown,
       bgColor: "bg-red-100",
       iconColor: "text-red-600",
