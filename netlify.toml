@@ -1,7 +1,6 @@
-# netlify.toml
 [build]
-  command = "mkdir -p dist/public && npx vite build --outDir dist/public && cp _redirects dist/public/"
-  publish = "dist/public"  
+  command = "npx vite build && cp _redirects dist/"
+  publish = "dist"
   
 [build.environment]
   NODE_VERSION = "20"
