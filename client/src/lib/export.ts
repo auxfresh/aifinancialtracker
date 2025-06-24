@@ -1,15 +1,8 @@
 
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { saveAs } from 'file-saver';
 import type { Transaction } from '@shared/schema';
-
-// Extend jsPDF type to include autoTable
-declare module 'jspdf' {
-  interface jsPDF {
-    autoTable: (options: any) => jsPDF;
-  }
-}
 
 export const exportToTXT = (transactions: Transaction[], userName: string) => {
   let content = `Personal Finance Tracker - Transaction Export\n`;
@@ -82,7 +75,7 @@ export const exportToPDF = (transactions: Transaction[], userName: string) => {
     `${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}`
   ]);
 
-  doc.autoTable({
+  autoTable(doc, {
     head: [['Date', 'Description', 'Category', 'Type', 'Amount']],
     body: tableData,
     startY: 115,
