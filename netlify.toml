@@ -1,17 +1,31 @@
-
- [build]
-  publish = "dist"
+[build]
+  publish = "dist/public"
   command = "vite build -c vite.config.netlify.ts"
 
-[functions]
-  directory = "netlify/functions"
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+[build.environment]
+  NODE_VERSION = "20"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+[functions]
+  directory = "dist"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
