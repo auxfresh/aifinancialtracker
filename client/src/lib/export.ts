@@ -31,7 +31,7 @@ export const exportToTXT = (transactions: Transaction[], userName: string) => {
   transactions.forEach((transaction, index) => {
     content += `${index + 1}. ${transaction.description}\n`;
     content += `   Date: ${transaction.date.toLocaleDateString()}\n`;
-    content += `   Amount: ${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}\n`;
+    content += `   Amount: ${transaction.type === 'income' ? '+' : '-'}₦${transaction.amount.toFixed(2)}\n`;
     content += `   Category: ${transaction.category.charAt(0).toUpperCase() + transaction.category.slice(1)}\n`;
     content += `   Type: ${transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}\n\n`;
   });
