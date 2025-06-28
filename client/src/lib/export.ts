@@ -116,7 +116,7 @@ export const exportToCSV = (transactions: Transaction[], userName: string) => {
     const description = `"${transaction.description.replace(/"/g, '""')}"`;
     const category = transaction.category.charAt(0).toUpperCase() + transaction.category.slice(1);
     const type = transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
-    const amount = `${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}`;
+    const amount = `${transaction.type === 'income' ? '+' : '-'}₦${transaction.amount.toFixed(2)}`;
     
     csvContent += `${date},${description},${category},${type},${amount}\n`;
   });
