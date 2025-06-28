@@ -136,7 +136,7 @@ export default function Reports({ user }: ReportsProps) {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="month" />
                         <YAxis />
-                        <Tooltip formatter={(value: number) => [`$${value.toFixed(2)}`, '']} />
+                        <Tooltip formatter={(value: number) => [`₦${value.toFixed(2)}`, '']} />
                         <Bar dataKey="income" fill="#10b981" name="Income" />
                         <Bar dataKey="expenses" fill="#ef4444" name="Expenses" />
                       </BarChart>
@@ -165,13 +165,13 @@ export default function Reports({ user }: ReportsProps) {
                         cy="50%"
                         outerRadius={70}
                         dataKey="value"
-                        label={({ name, value }) => `${name}: $${value.toFixed(0)}`}
+                        label={({ name, value }) => `${name}: ₦${value.toFixed(0)}`}
                       >
                         {overallData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
+                      <Tooltip formatter={(value: number) => `₦${value.toFixed(2)}`} />
                     </PieChart>
                   </ResponsiveContainer>
                 ) : (
@@ -198,13 +198,13 @@ export default function Reports({ user }: ReportsProps) {
                       cy="50%"
                       outerRadius={70}
                       dataKey="value"
-                      label={({ name, value }) => `${name}: $${value.toFixed(0)}`}
+                      label={({ name, value }) => `${name}: ₦${value.toFixed(0)}`}
                     >
                       {categoryData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
+                    <Tooltip formatter={(value: number) => `₦${value.toFixed(2)}`} />
                   </PieChart>
                 </ResponsiveContainer>
               ) : (
