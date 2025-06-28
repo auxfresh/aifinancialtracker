@@ -1,4 +1,3 @@
-
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { saveAs } from 'file-saver';
@@ -36,7 +35,7 @@ export const exportToTXT = (transactions: Transaction[], userName: string) => {
     content += `   Type: ${transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}\n\n`;
   });
 
-  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const blob = new Blob(["\uFEFF" + content], { type: 'text/plain;charset=utf-8' }); // ✅ Add BOM
   saveAs(blob, `transactions_${new Date().toISOString().split('T')[0]}.txt`);
 };
 
@@ -121,6 +120,6 @@ export const exportToCSV = (transactions: Transaction[], userName: string) => {
     csvContent += `${date},${description},${category},${type},${amount}\n`;
   });
 
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+  const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8' }); // ✅ Add BOM
   saveAs(blob, `transactions_${new Date().toISOString().split('T')[0]}.csv`);
 };
