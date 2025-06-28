@@ -72,7 +72,7 @@ export default function ExpenseCategories({ transactions }: ExpenseCategoriesPro
                       <div className={`h-3 w-3 ${colorClass} rounded-full`}></div>
                       <span className="text-sm font-medium text-slate-700">{categoryName}</span>
                     </div>
-                    <span className="text-sm font-semibold text-slate-900">${amount.toFixed(2)}</span>
+                    <span className="text-sm font-semibold text-slate-900">₦{amount.toFixed(2)}</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
                     <div 
