@@ -168,7 +168,7 @@ export default function Transactions({ user }: TransactionsProps) {
                           <span className={`font-semibold text-lg md:text-base self-start md:self-auto ${
                             transaction.type === "income" ? "text-green-600" : "text-red-600"
                           }`}>
-                            {transaction.type === "income" ? "+" : "-"}${transaction.amount.toFixed(2)}
+                            {transaction.type === "income" ? "+" : "-"}₦{transaction.amount.toFixed(2)}
                           </span>
                         </div>
                         <div className="flex flex-wrap items-center gap-2 md:gap-4 mt-2">
